@@ -1,4 +1,12 @@
-<div class="flex h-screen bg-gray-100 overflow-hidden">
+<div class="flex h-screen bg-gray-100 overflow-hidden" 
+     x-data="{ isSuccessModalShow: false, changeAmount: 0, trxId: null }"
+     x-on:transaction-completed.window="
+        isSuccessModalShow = true;
+        changeAmount = $event.detail.change;
+        trxId = $event.detail.transactionId;
+     "
+     x-on:payment-error.window="alert('Error: ' + $event.detail.message);"
+>
     
     <div class="w-2/3 flex flex-col border-r border-gray-300">
     
@@ -175,4 +183,44 @@
         </div>
     </div>
     @endif
+
+    {{-- MODAL NOTIFIKASI PEMBAYARAN BERHASIL (TAMBAHAN) --}}
+    <div x-cloak x-show="isSuccessModalShow" 
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div x-show="isSuccessModalShow" 
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
+            
+            <div class="text-green-500 mx-auto mb-4">
+                {{-- Penambahan kelas animate-bounce untuk animasi --}}
+                <svg class="w-16 h-16 mx-auto animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Pembayaran Berhasil!</h3>
+            <p class="text-gray-600 mb-4">Transaksi telah selesai.</p>
+
+            <div class="bg-green-50 p-4 rounded-xl mb-6">
+                <p class="text-sm text-green-700">Kembalian</p>
+                <p class="text-3xl font-extrabold text-green-800" x-text="'Rp ' + (changeAmount).toLocaleString('id-ID')"></p>
+            </div>
+
+            <div class="flex flex-col space-y-3">
+                <a :href="'{{ route('print.receipt', '') }}/' + trxId" 
+                   target="_blank"
+                   class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow transition">
+                    Cetak Struk
+                </a>
+                <button @click="isSuccessModalShow = false" 
+                        class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-lg transition">
+                    Kembali ke Kasir
+                </button>
+            </div>
+
+        </div>
+    </div>
 </div>

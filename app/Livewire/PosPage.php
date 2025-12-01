@@ -24,6 +24,7 @@ class PosPage extends Component
     public $isShowModal = false;
     public $payAmount = 0; // Uang yang dibayarkan
     public $change = 0;    // Kembalian
+    public $transactionId = null; // TAMBAHAN: Menyimpan ID Transaksi untuk pop-up notifikasi
 
     public function updatedSearch() { $this->resetPage(); }
 
@@ -116,7 +117,8 @@ class PosPage extends Component
     public function saveTransaction()
     {
         if ($this->payAmount < $this->total) {
-            // Bisa tambahkan alert error disini jika mau
+            // Tambahkan event error jika uang kurang
+            $this->dispatch('payment-error', message: 'Uang yang dibayarkan kurang dari total tagihan.');
             return;
         }
 
@@ -148,13 +150,14 @@ class PosPage extends Component
                 }
             }
 
-            // 3. Reset Cart
+            // 3. Simpan ID Transaksi untuk pop-up, Reset Cart & Tutup Modal Pembayaran
+            $this->transactionId = $trx->id;
             $this->cart = [];
             $this->total = 0;
             $this->isShowModal = false;
 
-            // 4. Redirect ke halaman cetak struk
-            return redirect()->route('print.receipt', $trx->id);
+            // 4. Mengganti redirect dengan dispatch event untuk menampilkan pop-up di client
+            $this->dispatch('transaction-completed', change: $this->change, transactionId: $this->transactionId);
         });
     }
 
