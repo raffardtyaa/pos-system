@@ -17,7 +17,7 @@
 </head>
 <body onload="window.print(); setTimeout(function(){ window.location.href = '/'; }, 3000);"> 
     <div class="header">
-        <div class="store-name">TOKO ICLIK</div>
+        <div class="store-name">WARUNG MADURA 88</div>
         <div>Jl. Merdeka No. 1</div>
     </div>
     <div class="divider"></div>

@@ -30,7 +30,9 @@ class CategoryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     
     // Opsional: Ganti label navigasi biar bahasa Indonesia (Kategori)
-    protected static ?string $navigationLabel = 'Kategori'; 
+    protected static ?string $navigationLabel = 'Kategori';
+    
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

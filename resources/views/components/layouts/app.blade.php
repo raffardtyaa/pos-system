@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'POS System' }}</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
-        /* Sembunyikan scrollbar tapi tetap bisa scroll (opsional, biar rapi) */
+        /* Sembunyikan scrollbar tapi tetap bisa scroll */
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
